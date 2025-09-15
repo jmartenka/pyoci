@@ -9,7 +9,8 @@ use std::task::{Context, Poll};
 use tower::{Layer, Service};
 use url::Url;
 
-use crate::pyoci::{AuthResponse, PyOciError};
+use crate::error::PyOciError;
+use crate::pyoci::AuthResponse;
 
 /// Authentication layer for the OCI registry
 /// This layer will handle [token authentication](https://distribution.github.io/distribution/spec/auth/token/)
