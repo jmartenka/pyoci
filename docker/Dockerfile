@@ -8,12 +8,12 @@ ARG TARGETARCH
 
 FROM rust:1.81.0 AS builder
 
-# Re-declare TARGETARCH in the builder stage
-ARG TARGETARCH
-RUN case "$TARGETARCH" in \
-        "amd64") echo "x86_64-unknown-linux-musl" > /tmp/target ;; \
-        "arm64") echo "aarch64-unknown-linux-musl" > /tmp/target ;; \
-        *) echo "Unsupported architecture: $TARGETARCH" && exit 1 ;; \
+# Detect architecture at runtime
+RUN ARCH=$(uname -m) && \
+    case "$ARCH" in \
+        "x86_64") echo "x86_64-unknown-linux-musl" > /tmp/target ;; \
+        "aarch64") echo "aarch64-unknown-linux-musl" > /tmp/target ;; \
+        *) echo "Unsupported architecture: $ARCH" && exit 1 ;; \
     esac
 
 # Add the appropriate Rust target
