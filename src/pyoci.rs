@@ -162,8 +162,20 @@ impl From<(StatusCode, String)> for PyOciError {
 
 #[derive(Deserialize)]
 pub struct AuthResponse {
-    #[serde(alias = "access_token")]
+    #[serde(default)]
     pub token: String,
+    #[serde(default)]
+    pub access_token: String,
+}
+
+impl AuthResponse {
+    pub fn get_token(&self) -> &str {
+        if !self.token.is_empty() {
+            &self.token
+        } else {
+            &self.access_token
+        }
+    }
 }
 
 /// Client to communicate with the OCI v2 registry

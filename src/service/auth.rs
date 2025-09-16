@@ -298,7 +298,7 @@ where
         ))
     })?;
     let mut token =
-        http::HeaderValue::try_from(format!("Bearer {}", auth.token)).map_err(|err| {
+        http::HeaderValue::try_from(format!("Bearer {}", auth.get_token())).map_err(|err| {
             tracing::info!("Failed to create bearer token header");
             PyOciError::from((
                 StatusCode::BAD_GATEWAY,
