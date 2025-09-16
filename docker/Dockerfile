@@ -3,9 +3,12 @@
 ARG BUILDKIT_SBOM_SCAN_CONTEXT=true
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
 
+# Declare TARGETARCH before FROM to make it available
+ARG TARGETARCH
+
 FROM rust:1.81.0 AS builder
 
-# Determine the target architecture
+# Re-declare TARGETARCH in the builder stage
 ARG TARGETARCH
 RUN case "$TARGETARCH" in \
         "amd64") echo "x86_64-unknown-linux-musl" > /tmp/target ;; \
