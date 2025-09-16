@@ -5,7 +5,7 @@ name: pyoci
 
 platform:
   os: linux
-  arch: amd64
+  arch: arm64
 
 globals:
   - &docker_creds
@@ -27,7 +27,6 @@ steps:
       repo: ${REPO}
       context: .
       dockerfile: docker/Dockerfile
-      platforms: linux/amd64
       tags: 
         - '${DRONE_COMMIT_SHA}'
         - 'latest'
