@@ -84,6 +84,10 @@ pub fn router(env: Env) -> Router {
         .route(
             "/{registry}/{namespace}/",
             post(publish_package).layer(DefaultBodyLimit::max(env.body_limit)),
+        )
+        .route(
+            "/{registry}/{namespace}/{package}/",
+            post(publish_package_with_name).layer(DefaultBodyLimit::max(env.body_limit)),
         );
     let router = match env.path {
         // Router.nest() panics when there is no subpath, prevent the panic when
@@ -340,7 +344,19 @@ async fn publish_package(
             form_data.project_urls,
         )
         .await?;
-    Ok("Published".into())
+    Ok(form_data.filename)
+}
+
+/// Poetry appends package name to the URL, so we need this handler too
+#[debug_handler]
+#[tracing::instrument(skip_all)]
+async fn publish_package_with_name(
+    Path((registry, namespace, _package)): Path<(String, String, String)>,
+    headers: HeaderMap,
+    multipart: Multipart,
+) -> Result<String, AppError> {
+    // Ignore the package name in the path and use the one from the form data
+    publish_package(Path((registry, namespace)), headers, multipart).await
 }
 
 /// Parse the Authentication header, if provided
