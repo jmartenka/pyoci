@@ -32,11 +32,3 @@ steps:
         - '${DRONE_COMMIT_SHA}'
         - 'latest'
       purge: false
-
-trigger:
-  ref:
-    - refs/heads/main
-    - refs/heads/development
-  event:
-    - push
-    - pull_request
